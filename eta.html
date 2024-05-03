@@ -6,54 +6,77 @@
     <title>Train Schedule TV Interface</title>
     <style>
         body {
+            margin: 0;
+            padding: 0;
             background-color: #000;
             color: #fff;
             font-family: Arial, sans-serif;
             overflow: hidden;
-            margin: 0;
-            padding: 0;
         }
 
-        .tv-screen {
-            width: 100%;
+        .tv-container {
+            width: 100vw;
             height: 100vh;
             display: flex;
             justify-content: center;
             align-items: center;
         }
 
+        .tv-screen {
+            width: 90%;
+            height: 90%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
         .schedule {
-            max-width: 800px;
-            padding: 30px;
+            width: 100%;
+            max-width: 1600px; /* Adjust max-width as needed */
+            padding: 20px;
             background-color: rgba(0, 0, 0, 0.5);
             border: 2px solid #fff;
             border-radius: 20px;
-        }
-
-        .schedule h1 {
-            text-align: center;
-            font-size: 36px;
-            margin-bottom: 20px;
+            display: flex;
+            overflow-x: auto;
+            scrollbar-width: none; /* Firefox */
+            -ms-overflow-style: none; /* IE and Edge */
         }
 
         .platform {
-            margin-bottom: 20px;
+            flex: 0 0 auto;
+            margin-right: 20px;
+        }
+
+        .platform:last-child {
+            margin-right: 0;
+        }
+
+        .platform-heading {
+            font-size: 40px; /* Larger font size for TV */
+            margin-bottom: 10px;
+        }
+
+        .route-container {
+            display: flex;
+            flex-direction: column;
         }
 
         .route {
-            padding: 15px;
+            padding: 20px;
             background-color: rgba(255, 255, 255, 0.1);
-            border-radius: 10px;
-            margin-bottom: 15px;
+            border-radius: 20px;
+            margin-bottom: 30px;
         }
 
         .route h2 {
-            font-size: 24px;
+            font-size: 36px; /* Larger font size for TV */
             margin-bottom: 10px;
         }
 
         .route-item {
-            margin-bottom: 5px;
+            font-size: 32px; /* Larger font size for TV */
+            margin-bottom: 10px;
         }
 
         .route-item span {
@@ -63,18 +86,22 @@
         .route-item .time {
             margin-left: 10px;
         }
+
+        /* Hide scrollbar */
+        .schedule::-webkit-scrollbar {
+            display: none; /* Chrome, Safari, Opera */
+        }
     </style>
 </head>
 <body>
-<div class="tv-screen">
-    <div class="schedule">
-        <h1>Train Schedule</h1>
-        <div id="scheduleData"></div>
+<div class="tv-container">
+    <div class="tv-screen">
+        <div class="schedule" id="scheduleData"></div>
     </div>
 </div>
 <script>
     function fetchAndUpdateData() {
-        fetch('https://rt.data.gov.hk/v1/transport/mtr/lrt/getSchedule?station_id=430')
+        fetch(`https://rt.data.gov.hk/v1/transport/mtr/lrt/getSchedule?station_id=100`)
             .then(response => response.json())
             .then(data => {
                 const scheduleData = document.getElementById('scheduleData');
@@ -87,6 +114,14 @@
                         const platformDiv = document.createElement('div');
                         platformDiv.classList.add('platform');
 
+                        const platformIdHeading = document.createElement('h2');
+                        platformIdHeading.classList.add('platform-heading');
+                        platformIdHeading.textContent = `Platform ${platform.platform_id}`;
+                        platformDiv.appendChild(platformIdHeading);
+
+                        const routeContainer = document.createElement('div');
+                        routeContainer.classList.add('route-container');
+
                         const routes = platform.route_list;
                         routes.forEach(route => {
                             const routeDiv = document.createElement('div');
@@ -94,10 +129,16 @@
 
                             const destination = route.dest_en;
                             const time = route.time_en;
+                            const routeNo = route.route_no;
 
                             const heading = document.createElement('h2');
                             heading.textContent = `${destination}`;
                             routeDiv.appendChild(heading);
+
+                            const routeNumber = document.createElement('div');
+                            routeNumber.classList.add('route-item');
+                            routeNumber.textContent = `Route Number: ${routeNo}`;
+                            routeDiv.appendChild(routeNumber);
 
                             const trainLength = document.createElement('div');
                             trainLength.classList.add('route-item');
@@ -114,9 +155,10 @@
                             timeInfo.innerHTML = `Time: <span>${time}</span>`;
                             routeDiv.appendChild(timeInfo);
 
-                            platformDiv.appendChild(routeDiv);
+                            routeContainer.appendChild(routeDiv);
                         });
 
+                        platformDiv.appendChild(routeContainer);
                         scheduleData.appendChild(platformDiv);
                     });
                 } else {
@@ -126,12 +168,19 @@
             .catch(error => {
                 console.error('Error fetching data:', error);
                 scheduleData.textContent = 'Failed to fetch data.';
+            })
+            .finally(() => {
+                // Fetch data again after 4 seconds
+                setTimeout(fetchAndUpdateData, 4000);
             });
     }
 
-    // Fetch data initially and then update every 4 seconds
-    fetchAndUpdateData();
-    setInterval(fetchAndUpdateData, 4000);
+    function initialize() {
+        fetchAndUpdateData();
+    }
+
+    // Initialize the UI
+    initialize();
 </script>
 </body>
 </html>
