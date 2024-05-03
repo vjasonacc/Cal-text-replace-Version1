@@ -1,11 +1,12 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Text Replacement</title>
+  <title>Text Replace</title>
   <style>
     body {
       font-family: Arial, sans-serif;
       text-align: center;
+      padding: 20px;
     }
     
     h1 {
@@ -54,10 +55,58 @@
     .output-line {
       margin-bottom: 10px;
     }
+    
+    .popup-container {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.5);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 999;
+      display: none;
+    }
+    
+    .popup {
+      background-color: #fff;
+      padding: 20px;
+      border-radius: 4px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+      max-width: 400px;
+    }
+    
+    .popup h2 {
+      margin-top: 0;
+      color: #333;
+    }
+    
+    .popup-buttons {
+      margin-top: 20px;
+      text-align: center;
+    }
+    
+    .popup-buttons button {
+      margin: 10px;
+      padding: 10px 20px;
+      background-color: #007bff;
+      color: #fff;
+      border: none;
+      border-radius: 4px;
+      font-size: 16px;
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+    
+    .popup-buttons button:hover {
+      background-color: #0056b3;
+    }
   </style>
 </head>
 <body>
-  <h1>Text Replacement</h1>
+  <h1>Text Replace</h1>
 
   <div class="input-container">
     <textarea id="inputText" placeholder="Enter text..."></textarea>
@@ -65,9 +114,25 @@
 
   <div class="btn-container">
     <button class="btn" onclick="replaceText()">Replace Text</button>
+    <button class="btn" onclick="downloadWord()">Download as Word</button>
+    <button class="btn" onclick="downloadPDF()">Download as PDF</button>
+    <button class="btn" onclick="downloadImage()">Download as Image</button>
+    <button class="btn" onclick="downloadInput()">Download Input as Word</button>
+    <button class="btn" onclick="showResetPopup()">Reset Data</button>
   </div>
 
   <div class="output-container" id="outputContainer"></div>
+
+  <div class="popup-container" id="popupContainer">
+    <div class="popup">
+      <h2>Reset Data</h2>
+      <p>Are you sure you want to reset the data?</p>
+      <div class="popup-buttons">
+        <button onclick="resetData()">Yes</button>
+        <button onclick="hideResetPopup()">No</button>
+      </div>
+    </div>
+  </div>
 
   <script>
     function replaceText() {
@@ -76,41 +141,107 @@
       outputContainer.innerHTML = '';
 
       var replacements = {
-        'A': 'Button Alpha',
-        'B': 'Button Alpha',
-        'C': 'Button Alpha',
-        'D': 'Button Alpha',
+        'A': 'A > Button Alpha',
+        'B': 'B > Button Alpha',
+        'C': 'C > Button Alpha',
+        'D': 'D > Button Alpha',
+        'E': 'E > exp',
+        'F': 'F > 鍵7 > 5 ➡️ 2',
+        'G': 'G 鍵7 8 > 3',
+        'H': 'H 鍵7 1 ➡️ 2',
+        'I': 'I: 數字1',
+        'J': 'J :10:',
+        'K': 'K 鍵7 6 ➡️ 1',
+        'L': 'L 數字1',
+        'M': 'M 自己鍵鍵~=啊法',
+        'N': 'N :14:',
+        'O': 'O 數字0',
+        'P': 'P :16:',
+        'Q': 'Q :17:',
+        'R': 'R 鍵7 6 ➡️ 3',
+        'S': 'S 5',
+        'T': 'T 鍵7 9 ➡️ 2',
+        'U': 'U 鍵7 4 ➡️ 1',
+        'V': 'V :22:',
+        'W': 'W ：23',
+        'X': 'X 自己鍵鍵~=啊法',
+        'Y': 'Y 自己鍵鍵~=啊法',
+        'Z': 'Z ：26：'
       };
 
       var lines = inputText.split('\n');
-      var output = 'Thank you for using our program, there are a total of ' + lines.length + ' lines output.\n';
+      var outputText = 'Thank you for using our program, there are a total of ' + lines.length + ' lines output.<br>';
 
       for (var i = 0; i < lines.length; i++) {
-        var line = lines[i];
-        var replacedLine = '';
-
-        for (var j = 0; j < line.length; j++) {
-          var char = line[j];
-          if (replacements.hasOwnProperty(char)) {
-            replacedLine += char + ' > ' + replacements[char] + '\n';
-          } else {
-            replacedLine += char + '\n';
-          }
-        }
-
-        output += replacedLine;
-      }
-
-      var outputLines = output.split('\n');
-      for (var k = 0; k < outputLines.length; k++) {
-        var line = outputLines[k];
-        if (line !== '') {
-          var outputLine = document.createElement('div');
-          outputLine.className = 'output-line';
-          outputLine.innerText = line;
-          outputContainer.appendChild(outputLine);
+        var line = lines[i].toUpperCase();
+        if (replacements.hasOwnProperty(line)) {
+          outputText += line + ' > ' + replacements[line] + '<br>';
         }
       }
+
+      outputContainer.innerHTML = outputText;
+    }
+
+    function downloadWord() {
+      var outputContainer = document.getElementById('outputContainer');
+      var outputText = outputContainer.innerHTML;
+      var element = document.createElement('a');
+      element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(outputText));
+      element.setAttribute('download', 'output.doc');
+      element.style.display = 'none';
+      document.body.appendChild(element);
+      element.click();
+      document.body.removeChild(element);
+    }
+
+    function downloadPDF() {
+      var outputContainer = document.getElementById('outputContainer');
+      var outputText = outputContainer.innerHTML;
+      var element = document.createElement('a');
+      element.setAttribute('href', 'data:application/pdf;charset=utf-8,' + encodeURIComponent(outputText));
+      element.setAttribute('download', 'output.pdf');
+      element.style.display = 'none';
+      document.body.appendChild(element);
+      element.click();
+      document.body.removeChild(element);
+    }
+
+    function downloadImage() {
+      var outputContainer = document.getElementById('outputContainer');
+      var element = document.createElement('a');
+      element.setAttribute('href', 'data:image/jpeg;charset=utf-8,' + encodeURIComponent(outputContainer.innerHTML));
+      element.setAttribute('download', 'output.jpg');
+      element.style.display = 'none';
+      document.body.appendChild(element);
+      element.click();
+      document.body.removeChild(element);
+    }
+
+    function downloadInput() {
+      var inputText = document.getElementById('inputText').value;
+      var element = document.createElement('a');
+      element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(inputText));
+      element.setAttribute('download', 'input.doc');
+      element.style.display = 'none';
+      document.body.appendChild(element);
+      element.click();
+      document.body.removeChild(element);
+    }
+
+    function showResetPopup() {
+      var popupContainer = document.getElementById('popupContainer');
+      popupContainer.style.display = 'flex';
+    }
+
+    function hideResetPopup() {
+      var popupContainer = document.getElementById('popupContainer');
+      popupContainer.style.display = 'none';
+    }
+
+    function resetData() {
+      document.getElementById('inputText').value = '';
+      document.getElementById('outputContainer').innerHTML = '';
+      hideResetPopup();
     }
   </script>
 </body>
