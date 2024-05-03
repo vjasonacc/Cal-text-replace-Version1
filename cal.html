@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Text Replace</title>
+  <title>Text Replace v2Mac</title>
   <style>
     body {
       font-family: Arial, sans-serif;
@@ -56,6 +56,10 @@
       text-align: left;
       max-height: 300px; /* Set a maximum height for the output area */
       overflow-y: auto; /* Enable vertical scrollbar when content exceeds the max height */
+    }
+
+    .checkbox {
+      margin-left: 10px;
     }
   </style>
 </head>
@@ -111,6 +115,9 @@
 
     const lines = inputText.split('\n');
     lines.forEach(line => {
+      outputHTML += '<div class="line">';
+      outputHTML += '<input type="checkbox" class="checkbox">';
+      outputHTML += '<span>';
       outputHTML += '<p>- - - - - - - - - - - -</p>';
       outputHTML += '<p>' + line + '</p>';
       for (let i = 0; i < line.length; i++) {
@@ -122,6 +129,8 @@
           outputHTML += '<p>' + character + '</p>';
         }
       }
+      outputHTML += '</span>';
+      outputHTML += '</div>';
     });
 
     outputHTML += '<p>=============</p>';
@@ -135,22 +144,10 @@
     const now = new Date();
     const hours = now.getHours() % 12 || 12; // Convert hours to 12-hour format
     const minutes = now.getMinutes().toString().padStart(2, '0'); // Add leading zero if minutes < 10
+    const seconds = now.getSeconds().toString().padStart(2, '0'); // Add leading zero if seconds < 10
     const ampm = now.getHours() >= 12 ? 'PM' : 'AM';
-    const formattedDateAndTime = now.toLocaleDateString() + ' ' + hours + ':' + minutes + ' ' + ampm;
+    const formattedDateAndTime = now.toLocaleDateString() + ' ' + hours + ':' + minutes + ':' + seconds + ' ' + ampm;
     return formattedDateAndTime;
-  }
-
-  function download(filename, text) {
-    var element = document.createElement('a');
-    element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(text));
-    element.setAttribute('download', filename);
-
-    element.style.display = 'none';
-    document.body.appendChild(element);
-
-    element.click();
-
-    document.body.removeChild(element);
   }
 
   function downloadWord() {
@@ -185,6 +182,21 @@
       document.getElementById('output').innerHTML = '';
     }
   }
+
+  // Function to trigger download
+  function download(filename, text) {
+    var element = document.createElement('a');
+    element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(text));
+    element.setAttribute('download', filename);
+
+    element.style.display = 'none';
+    document.body.appendChild(element);
+
+    element.click();
+
+    document.body.removeChild(element);
+  }
+
 </script>
 </body>
 </html>
