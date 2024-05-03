@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Text Replace</title>
+  <style>
+    /* Add your beautiful, cool, modern CSS styles here */
+  </style>
+</head>
+<body>
+  <h1>Text Replace</h1>
+  <textarea id="textInput" rows="5" cols="50"></textarea><br><br>
+  <button onclick="replaceText()">Replace Text</button>
+  <button onclick="downloadAsWord()">Download as Word</button>
+  <button onclick="downloadAsPDF()">Download as PDF</button>
+  <button onclick="downloadAsImage()">Download as Image</button>
+  <button onclick="downloadInputAsWord()">Download Input as Word</button>
+  <button onclick="resetData()">Reset Data</button>
+  
+  <div id="output"></div>
+  
+  <script>
+    function replaceText() {
+      var inputText = document.getElementById("textInput").value;
+      var replacedText = inputText.replace(/A/gi, "A > Button Alpha")
+                                  .replace(/B/gi, "B > Button Alpha")
+                                  .replace(/C/gi, "C > Button Alpha")
+                                  .replace(/D/gi, "D > Button Alpha")
+                                  .replace(/E/gi, "E > exp")
+                                  .replace(/F/gi, "F > 鍵7 > 5 ➡️ 2")
+                                  .replace(/G/gi, "G 鍵7 8 > 3")
+                                  .replace(/H/gi, "H 鍵7 1 ➡️ 2")
+                                  .replace(/I/gi, "I : 數字1")
+                                  .replace(/J/gi, "J :10:")
+                                  .replace(/K/gi, "K 鍵7 6 ➡️ 1")
+                                  .replace(/L/gi, "L 數字1")
+                                  .replace(/M/gi, "M 自己鍵鍵~=啊法")
+                                  .replace(/N/gi, "N :14:")
+                                  .replace(/O/gi, "O 數字0")
+                                  .replace(/P/gi, "P :16:")
+                                  .replace(/Q/gi, "Q :17:")
+                                  .replace(/R/gi, "R 鍵7 6 ➡️ 3")
+                                  .replace(/S/gi, "S 5")
+                                  .replace(/T/gi, "T 鍵7 9 ➡️ 2")
+                                  .replace(/U/gi, "U 鍵7 4 ➡️ 1")
+                                  .replace(/V/gi, "V :22:")
+                                  .replace(/W/gi, "W ：23")
+                                  .replace(/X/gi, "X 自己鍵鍵~=啊法")
+                                  .replace(/Y/gi, "Y 自己鍵鍵~=啊法")
+                                  .replace(/Z/gi, "Z ：26：");
+
+      var lines = replacedText.split('\n');
+      var outputContainer = document.getElementById("output");
+      outputContainer.innerHTML = "Thank you for using our program, there are a total of " + lines.length + " lines output." + "<br>";
+
+      for (var i = 0; i < lines.length; i++) {
+        outputContainer.innerHTML += lines[i] + "<br>";
+      }
+    }
+
+    function downloadAsWord() {
+      var outputText = document.getElementById("output").innerText;
+      var blob = new Blob([outputText], { type: 'text/plain' });
+      var url = URL.createObjectURL(blob);
+      var link = document.createElement("a");
+      link.href = url;
+      link.download = "output.docx";
+      link.click();
+    }
+
+    function downloadAsPDF() {
+      var outputText = document.getElementById("output").innerText;
+      // Code for generating PDF from outputText
+    }
+
+    function downloadAsImage() {
+      var outputText = document.getElementById("output").innerText;
+      // Code for converting outputText to image
+    }
+
+    function downloadInputAsWord() {
+      var inputText = document.getElementById("textInput").value;
+      var blob = new Blob([inputText], { type: 'text/plain' });
+      var url = URL.createObjectURL(blob);
+      var link = document.createElement("a");
+      link.href = url;
+      link.download = "input.docx";
+      link.click();
+    }
+
+    function resetData() {
+      if (confirm("Are you sure you want to reset the data?")) {
+        document.getElementById("textInput").value = "";
+        document.getElementById("output").innerHTML = "";
+      }
+    }
+  </script>
+</body>
+</html>
