@@ -5,165 +5,252 @@
   <style>
     body {
       font-family: Arial, sans-serif;
-    }
-
-    h1 {
       text-align: center;
     }
-
-    .container {
-      max-width: 600px;
-      margin: 0 auto;
-      padding: 20px;
+    
+    h1 {
+      color: #333;
+      margin-top: 20px;
     }
-
+    
+    .input-container {
+      margin-top: 30px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+    
     textarea {
-      width: 100%;
+      width: 300px;
+      height: 100px;
       padding: 10px;
+      font-size: 16px;
+      border: 1px solid #999;
+      resize: none;
+    }
+    
+    .btn-container {
+      margin-top: 20px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+    
+    .btn {
+      margin: 10px;
+      padding: 10px 20px;
+      background-color: #007bff;
+      color: #fff;
+      border: none;
+      border-radius: 4px;
+      font-size: 16px;
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+    
+    .btn:hover {
+      background-color: #0056b3;
+    }
+    
+    .output-container {
+      margin-top: 30px;
+      text-align: left;
+    }
+    
+    .output-line {
       margin-bottom: 10px;
     }
-
-    .output {
-      margin-top: 20px;
-      padding: 10px;
-      border: 1px solid #ccc;
+    
+    .reset-container {
+      margin-top: 30px;
+    }
+    
+    .reset-btn {
+      color: #007bff;
+      cursor: pointer;
+      text-decoration: underline;
+    }
+    
+    .popup-container {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.5);
+    }
+    
+    .popup-content {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      height: 100%;
+    }
+    
+    .popup-message {
+      color: #fff;
+      font-size: 20px;
+      margin-bottom: 20px;
+    }
+    
+    .popup-btns {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+    
+    .popup-btn {
+      margin: 0 10px;
+      padding: 10px 20px;
+      background-color: #007bff;
+      color: #fff;
+      border: none;
+      border-radius: 4px;
+      font-size: 16px;
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+    
+    .popup-btn:hover {
+      background-color: #0056b3;
     }
   </style>
 </head>
 <body>
-  <div class="container">
-    <h1>Text Replace</h1>
-    <textarea id="textInput" rows="5" placeholder="Enter text"></textarea>
-    <button onclick="replaceText()">Replace Text</button>
-    <button onclick="downloadOutput('output.txt', outputData)">Download Output as Text</button>
-    <button onclick="downloadInput('input.txt', inputData)">Download Input as Text</button>
-    <button onclick="resetData()">Reset Data</button>
-    <div class="output" id="output"></div>
+  <h1>Text Replace</h1>
+
+  <div class="input-container">
+    <textarea id="inputText" placeholder="Enter text..."></textarea>
+  </div>
+
+  <div class="btn-container">
+    <button class="btn" onclick="replaceText()">Replace Text</button>
+    <button class="btn" onclick="downloadOutput('output.doc', 'application/msword')">Download as Word</button>
+    <button class="btn" onclick="downloadOutput('output.pdf', 'application/pdf')">Download as PDF</button>
+    <button class="btn" onclick="downloadOutput('output.jpg', 'image/jpeg')">Download as JPEG</button>
+    <button class="btn" onclick="downloadInput('input.doc', 'application/msword')">Download Input</button>
+  </div>
+
+  <div class="output-container" id="outputContainer"></div>
+
+  <div class="reset-container">
+    <span class="reset-btn" onclick="showPopup()">Reset Data</span>
+  </div>
+
+  <div class="popup-container" id="popupContainer">
+    <div class="popup-content">
+      <p class="popup-message">Are you sure you want to reset the data?</p>
+      <div class="popup-btns">
+        <button class="popup-btn" onclick="resetData()">Yes</button>
+        <button class="popup-btn" onclick="hidePopup()">No</button>
+      </div>
+    </div>
   </div>
 
   <script>
     function replaceText() {
-      var inputText = document.getElementById("textInput").value;
-      var replacedText = inputText.replace(/A/gi, "A > Button Alpha")
-                                  .replace(/B/gi, "B > Button Alpha")
-                                  .replace(/C/gi, "C > Button Alpha")
-                                  .replace(/D/gi, "D > Button Alpha")
-                                  .replace(/E/gi, "E > exp")
-                                  .replace(/F/gi, "F > 鍵7 > 5 ➡️ 2")
-                                  .replace(/G/gi, "G 鍵7 8 > 3")
-                                  .replace(/H/gi, "H 鍵7 1 ➡️ 2")
-                                  .replace(/I/gi, "I : 數字1")
-                                  .replace(/J/gi, "J :10:")
-                                  .replace(/K/gi, "K 鍵7 6 ➡️ 1")
-                                  .replace(/L/gi, "L 數字1")
-                                  .replace(/M/gi, "M 自己鍵鍵~=啊法")
-                                  .replace(/N/gi, "N :14:")
-                                  .replace(/O/gi, "O 數字0")
-                                  .replace(/P/gi, "P :16:")
-                                  .replace(/Q/gi, "Q :17:")
-                                  .replace(/R/gi, "R 鍵7 6 ➡️ 3")
-                                  .replace(/S/gi, "S 5")
-                                  .replace(/T/gi, "T 鍵7 9 ➡️ 2")
-                                  .replace(/U/gi, "U 鍵7 4 ➡️ 1")
-                                  .replace(/V/gi, "V :22:")
-                                  .replace(/W/gi, "W ：23")
-                                  .replace(/X/gi, "X 自己鍵鍵~=啊法")
-                                  .replace(/Y/gi, "Y 自己鍵鍵~=啊法")
-                                  .replace(/Z/gi, "Z ：26：");
+      var inputText = document.getElementById('inputText').value;
+      var outputContainer = document.getElementById('outputContainer');
+      outputContainer.innerHTML = '';
 
-      var lines = replacedText.split('\n');
-      var outputContainer = document.getElementById("output");
-      outputContainer.innerHTML = "Thank you for using our program, there are a total of " + lines.length + " lines output.<br>";
-      
+      var replacements = {
+        'A': 'Button Alpha',
+        'B': 'Button Alpha',
+        'C': 'Button Alpha',
+        'D': 'Button Alpha',
+        'E':'exp',
+        'F': '鍵7 > 5 ➡️ 2',
+        'G': '鍵7 8 > 3',
+        'H': '鍵7 1 ➡️ 2',
+        'I': '數字1',
+        'J': ':10:',
+        'K': '鍵7 6 ➡️ 1',
+        'L': '數字1',
+        'M': '自己鍵鍵~=啊法',
+        'N': ':14:',
+        'O': '數字0',
+        'P': ':16:',
+        'Q': ':17:',
+        'R': '鍵7 6 ➡️ 3',
+        'S': '5',
+        'T': '鍵7 9 ➡️ 2',
+        'U': '鍵7 4 ➡️ 1',
+        'V': ':22:',
+        'W': '：23',
+        'X': '自己鍵鍵~=啊法',
+        'Y': '自己鍵鍵~=啊法',
+        'Z': '：26：'
+      };
+
+      var lines = inputText.toUpperCase().split('\n');
+      var output = '';
+      var count = 0;
+
       for (var i = 0; i < lines.length; i++) {
-        outputContainer.innerHTML += lines[i] + "<br>";
+        var line = lines[i];
+        for (var j = 0; j < line.length; j++) {
+          var char = line[j];
+          if (replacements.hasOwnProperty(char)) {
+            output += char + ' > ' + replacements[char] + '\n';
+            count++;
+          }
+        }
       }
 
-      // Store data for download
-      outputData = replacedText;
-      inputData = inputText;
+      if (count > 0) {
+        outputContainer.innerHTML = 'Thank you for using our program, there are a total of ' + count + ' lines output.<br><br>';
+        outputContainer.innerHTML += output.replace(/\n/g, '<br>');
+      } else {
+        outputContainer.innerHTML = 'No replacements found.';
+      }
     }
 
-    function downloadOutput(filename, text) {
-      var blob = new Blob([text], { type: 'text/plain' });
-      var link = document.createElement("a");
-      link.href = URL.createObjectURL(blob);
-      link.download = filename;
-      link.click();
+    function downloadOutput(filename, filetype) {
+      var outputText = document.getElementById('outputContainer').innerText;
+      var blob = new Blob([outputText], { type: filetype });
+
+      if (window.navigator && window.navigator.msSaveOrOpenBlob) {
+        // For IE browser
+        window.navigator.msSaveOrOpenBlob(blob, filename);
+      } else {
+        // For other browsers
+        var link = document.createElement('a');
+        link.href = URL.createObjectURL(blob);
+        link.download = filename;
+        link.click();
+      }
     }
 
-    function downloadInput(filename, text) {
-      var blob = new Blob([text], { type: 'text/plain' });
-      var link = document.createElement("a");
-      link.href = URL.createObjectURL(blob);
-      link.download = filename;
-      link.click();
+    function downloadInput(filename, filetype) {
+      var inputText = document.getElementById('inputText').value;
+      var blob = new Blob([inputText], { type: filetype });
+
+      if (window.navigator && window.navigator.msSaveOrOpenBlob) {
+        // For IE browser
+        window.navigator.msSaveOrOpenBlob(blob, filename);
+      } else {
+        // For other browsers
+        var link = document.createElement('a');
+        link.href = URL.createObjectURL(blob);
+        link.download = filename;
+        link.click();
+      }
+    }
+
+    function showPopup() {
+      document.getElementById('popupContainer').style.display = 'flex';
+    }
+
+    function hidePopup() {
+      document.getElementById('popupContainer').style.display = 'none';
     }
 
     function resetData() {
-      if (confirm("Are you sure you want to reset the data?")) {
-        document.getElementById("textInput").value = "";
-        document.getElementById("output").innerHTML = "";
-      }
-    }
-  </script>
-</body>
-Apologies for the confusion. Here's the corrected and complete code with CSS styles and the desired output format:
-
-```html
-<!DOCTYPE html>
-<html>
-<head>
-  <title>Text Replace</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-    }
-
-    h1 {
-      text-align: center;
-    }
-
-    .container {
-      max-width: 600px;
-      margin: 0 auto;
-      padding: 20px;
-    }
-
-    textarea {
-      width: 100%;
-      padding: 10px;
-      margin-bottom: 10px;
-    }
-
-    .output {
-      margin-top: 20px;
-      padding: 10px;
-      border: 1px solid #ccc;
-    }
-  </style>
-</head>
-<body>
-  <div class="container">
-    <h1>Text Replace</h1>
-    <textarea id="textInput" rows="5" placeholder="Enter text"></textarea>
-    <button onclick="replaceText()">Replace Text</button>
-    <div class="output" id="output"></div>
-  </div>
-
-  <script>
-    function replaceText() {
-      var inputText = document.getElementById("textInput").value;
-      var replacedText = inputText.replace(/A/gi, "A > Button Alpha")
-                                  .replace(/B/gi, "B > Button Alpha");
-
-      var lines = replacedText.split('\n');
-      var outputContainer = document.getElementById("output");
-      outputContainer.innerHTML = "Thank you for using our program, there are a total of " + lines.length + " lines output.<br>";
-      
-      for (var i = 0; i < lines.length; i++) {
-        outputContainer.innerHTML += lines[i] + "<br>";
-      }
+      document.getElementById('inputText').value = '';
+      document.getElementById('outputContainer').innerHTML = '';
+      hidePopup();
     }
   </script>
 </body>
