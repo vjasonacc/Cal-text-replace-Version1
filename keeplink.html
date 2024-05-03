@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ver2 Tiny Notes App</title>
+    <title>Tiny Notes App</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -71,14 +71,32 @@
         <button class="btn" onclick="openNote(this)">Open</button>
         <button class="btn" onclick="deleteNote(this)">Delete</button>
       `;
-            document.getElementById('savedNotes').appendChild(noteDiv);
+            const savedNotes = document.getElementById('savedNotes');
+            if (savedNotes.firstChild) {
+                savedNotes.insertBefore(noteDiv, savedNotes.firstChild);
+            } else {
+                savedNotes.appendChild(noteDiv);
+            }
             document.getElementById('noteContent').value = '';
         }
     }
 
     function pasteContent() {
         navigator.clipboard.readText().then(text => {
-            document.getElementById('noteContent').value = text;
+            const noteDiv = document.createElement('div');
+            noteDiv.classList.add('note');
+            noteDiv.innerHTML = `
+        <textarea readonly>${text}</textarea>
+        <button class="btn" onclick="copyToClipboard(this)">Copy</button>
+        <button class="btn" onclick="openNote(this)">Open</button>
+        <button class="btn" onclick="deleteNote(this)">Delete</button>
+      `;
+            const savedNotes = document.getElementById('savedNotes');
+            if (savedNotes.firstChild) {
+                savedNotes.insertBefore(noteDiv, savedNotes.firstChild);
+            } else {
+                savedNotes.appendChild(noteDiv);
+            }
         }).catch(err => {
             console.error('Failed to read clipboard contents: ', err);
         });
@@ -96,9 +114,23 @@
     }
 
     function openNote(button) {
-        const noteText = button.parentElement.querySelector('textarea').value;
-        // Implement functionality to open the note, e.g., redirect to another page or display in a modal
-        alert(noteText); // Example: showing the note content in an alert
+        const noteText = button.parentElement.querySelector('textarea').value.trim();
+        let url = noteText;
+
+        // Check if the input is a valid URL
+        const isUrl = /^(?:\w+:)?\/\/([^\s\.]+\.\S{2}|localhost[\:?\d]*)\S*$/.test(url);
+
+        // If it's a valid URL, open it directly
+        if (isUrl) {
+            if (!url.startsWith('http://') && !url.startsWith('https://') && !url.startsWith('ftp://')) {
+                // If no protocol specified, prepend "http://"
+                url = 'http://' + url;
+            }
+            window.open(url, '_blank');
+        } else {
+            // If it's not a valid URL, alert the user
+            alert('Invalid URL');
+        }
     }
 </script>
 
