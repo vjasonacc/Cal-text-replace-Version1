@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Text Replace</title>
+  <title>Text Replacement</title>
   <style>
     body {
       font-family: Arial, sans-serif;
@@ -15,9 +15,6 @@
     
     .input-container {
       margin-top: 30px;
-      display: flex;
-      justify-content: center;
-      align-items: center;
     }
     
     textarea {
@@ -31,9 +28,6 @@
     
     .btn-container {
       margin-top: 20px;
-      display: flex;
-      justify-content: center;
-      align-items: center;
     }
     
     .btn {
@@ -60,66 +54,10 @@
     .output-line {
       margin-bottom: 10px;
     }
-    
-    .reset-container {
-      margin-top: 30px;
-    }
-    
-    .reset-btn {
-      color: #007bff;
-      cursor: pointer;
-      text-decoration: underline;
-    }
-    
-    .popup-container {
-      display: none;
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background-color: rgba(0, 0, 0, 0.5);
-    }
-    
-    .popup-content {
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      height: 100%;
-    }
-    
-    .popup-message {
-      color: #fff;
-      font-size: 20px;
-      margin-bottom: 20px;
-    }
-    
-    .popup-btns {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-    }
-    
-    .popup-btn {
-      margin: 0 10px;
-      padding: 10px 20px;
-      background-color: #007bff;
-      color: #fff;
-      border: none;
-      border-radius: 4px;
-      font-size: 16px;
-      cursor: pointer;
-      transition: background-color 0.3s;
-    }
-    
-    .popup-btn:hover {
-      background-color: #0056b3;
-    }
   </style>
 </head>
 <body>
-  <h1>Text Replace</h1>
+  <h1>Text Replacement</h1>
 
   <div class="input-container">
     <textarea id="inputText" placeholder="Enter text..."></textarea>
@@ -127,27 +65,9 @@
 
   <div class="btn-container">
     <button class="btn" onclick="replaceText()">Replace Text</button>
-    <button class="btn" onclick="downloadOutput('output.doc', 'application/msword')">Download as Word</button>
-    <button class="btn" onclick="downloadOutput('output.pdf', 'application/pdf')">Download as PDF</button>
-    <button class="btn" onclick="downloadOutput('output.jpg', 'image/jpeg')">Download as JPEG</button>
-    <button class="btn" onclick="downloadInput('input.doc', 'application/msword')">Download Input</button>
   </div>
 
   <div class="output-container" id="outputContainer"></div>
-
-  <div class="reset-container">
-    <span class="reset-btn" onclick="showPopup()">Reset Data</span>
-  </div>
-
-  <div class="popup-container" id="popupContainer">
-    <div class="popup-content">
-      <p class="popup-message">Are you sure you want to reset the data?</p>
-      <div class="popup-btns">
-        <button class="popup-btn" onclick="resetData()">Yes</button>
-        <button class="popup-btn" onclick="hidePopup()">No</button>
-      </div>
-    </div>
-  </div>
 
   <script>
     function replaceText() {
@@ -162,72 +82,36 @@
         'D': 'Button Alpha',
       };
 
-       var lines = inputText.split('\n');
-  var output = 'Thank you for using our program, there are a total of ' + lines.length + ' lines output.\n';
+      var lines = inputText.split('\n');
+      var output = 'Thank you for using our program, there are a total of ' + lines.length + ' lines output.\n';
 
-  for (var i = 0; i < lines.length; i++) {
-    var line = lines[i];
-    var replacedLine = '';
+      for (var i = 0; i < lines.length; i++) {
+        var line = lines[i];
+        var replacedLine = '';
 
-    for (var j = 0; j < line.length; j++) {
-      var char = line[j];
-      if (replacements.hasOwnProperty(char)) {
-        replacedLine += char + ' > ' + replacements[char] + '\n';
-      } else {
-        replacedLine += char + '\n';
+        for (var j = 0; j < line.length; j++) {
+          var char = line[j];
+          if (replacements.hasOwnProperty(char)) {
+            replacedLine += char + ' > ' + replacements[char] + '\n';
+          } else {
+            replacedLine += char + '\n';
+          }
+        }
+
+        output += replacedLine;
+      }
+
+      var outputLines = output.split('\n');
+      for (var k = 0; k < outputLines.length; k++) {
+        var line = outputLines[k];
+        if (line !== '') {
+          var outputLine = document.createElement('div');
+          outputLine.className = 'output-line';
+          outputLine.innerText = line;
+          outputContainer.appendChild(outputLine);
+        }
       }
     }
-
-    output += replacedLine;
-  }
-
-  var outputLines = output.split('\n');
-  for (var k = 0; k < outputLines.length; k++) {
-    var line = outputLines[k];
-    if (line !== '') {
-      var outputLine = document.createElement('div');
-      outputLine.className = 'output-line';
-      outputLine.innerText = line;
-      outputContainer.appendChild(outputLine);
-    }
-  }
-}
-
-function downloadOutput(filename, mimeType) {
-  var outputText = document.getElementById('outputContainer').innerText;
-  var blob = new Blob([outputText], { type: mimeType });
-
-  var link = document.createElement('a');
-  link.href = URL.createObjectURL(blob);
-  link.download = filename;
-  link.click();
-}
-
-function downloadInput(filename, mimeType) {
-  var inputText = document.getElementById('inputText').value;
-  var blob = new Blob([inputText], { type: mimeType });
-
-  var link = document.createElement('a');
-  link.href = URL.createObjectURL(blob);
-  link.download = filename;
-  link.click();
-}
-
-function showPopup() {
-  var popupContainer = document.getElementById('popupContainer');
-  popupContainer.style.display = 'flex';
-}
-
-function hidePopup() {
-  var popupContainer = document.getElementById('popupContainer');
-  popupContainer.style.display = 'none';
-}
-
-function resetData() {
-  document.getElementById('inputText').value = '';
-  document.getElementById('outputContainer').innerHTML = '';
-  hidePopup();
-}
-</script>
+  </script>
 </body>
 </html>
