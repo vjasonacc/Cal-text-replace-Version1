@@ -3,32 +3,37 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>ver2 Text Replace ver2 macver okworks</title>
+  <title>Text Replace</title>
   <style>
-    /* ok  Beautiful, modern CSS goes here */
     body {
       font-family: Arial, sans-serif;
-      background-color: #f4f4f4;
       margin: 0;
       padding: 0;
       display: flex;
-      justify-content: center;
+      flex-direction: column;
       align-items: center;
+      justify-content: center;
       height: 100vh;
+      background-color: #f4f4f4;
     }
 
     .container {
+      width: 80%;
       max-width: 600px;
+      text-align: center;
       background-color: #fff;
       padding: 20px;
-      border-radius: 8px;
-      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     }
 
-    textarea {
+    input[type="text"] {
       width: 100%;
-      height: 150px;
-      margin-bottom: 10px;
+      padding: 10px;
+      margin-bottom: 20px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      box-sizing: border-box;
     }
 
     button {
@@ -36,7 +41,7 @@
       background-color: #007bff;
       color: #fff;
       border: none;
-      border-radius: 4px;
+      border-radius: 5px;
       cursor: pointer;
     }
 
@@ -44,144 +49,111 @@
       background-color: #0056b3;
     }
 
-    .reset-btn {
-      background-color: #dc3545;
-    }
-
-    .reset-btn:hover {
-      background-color: #bd2130;
-    }
-
-    .popup {
-      display: none;
-      position: fixed;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      background-color: #fff;
-      padding: 20px;
-      border-radius: 8px;
-      box-shadow: 0 2px 4px rgba(0,0,0,0.2);
-      z-index: 999;
-    }
-
-    .popup h2 {
-      margin-top: 0;
-    }
-
-    .overlay {
-      display: none;
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background-color: rgba(0,0,0,0.5);
-      z-index: 998;
+    .output {
+      margin-top: 20px;
+      text-align: left;
     }
   </style>
 </head>
 <body>
-
 <div class="container">
-  <h1>Text Replace ver2</h1>
-  <textarea id="inputText" placeholder="Enter text here..."></textarea>
+  <input type="text" id="textInput" placeholder="Enter text...">
   <button onclick="replaceText()">Replace Text</button>
+  <div class="output" id="output"></div>
   <button onclick="downloadWord()">Download as Word</button>
   <button onclick="downloadPDF()">Download as PDF</button>
-  <button onclick="downloadImage()">Download as Image</button>
-  <button class="reset-btn" onclick="resetData()">Reset Data</button>
-
-  <div id="outputText"></div>
+  <button onclick="downloadImage()">Download as JPEG</button>
+  <button onclick="downloadInput()">Download Input</button>
+  <button onclick="resetData()">Reset Data</button>
 </div>
-
-<div id="popup" class="popup">
-  <h2>Are you sure you want to reset the data?</h2>
-  <button onclick="confirmReset()">Yes, Reset</button>
-  <button onclick="cancelReset()">Cancel</button>
-</div>
-
-<div id="overlay" class="overlay"></div>
 
 <script>
-  // Text Replace ver2 function
   function replaceText() {
-    var input = document.getElementById("inputText").value;
-    var output = input.replace(/([A-Z])/g, function(match) {
-      switch(match) {
-        case 'A': return 'A > Button Alpha';
-        case 'B': return 'B > Button Alpha';
-        case 'C': return 'C > Button Alpha';
-        case 'D': return 'D > Button Alpha';
-        case 'E': return 'E > exp';
-        case 'F': return 'F > Shift 7 > 5 ➡️ 2';
-        case 'G': return 'G Shift 7 > 8 ➡️ 3';
-        case 'H': return 'H Shift 7 > 1 ➡️ 2';
-        case 'I': return 'I > 數字1';
-        case 'J': return 'J > 數字 10:';
-        case 'K': return 'K > Shift 7 > 6 ➡️ 1';
-        case 'L': return 'L > 數字1';
-        case 'M': return 'M > Button Alpha';
-        case 'N': return 'N > Shift 7 > 1 ➡️ 3';
-        case 'O': return 'O > 數字 0';
-        case 'P': return 'P > Shift NPr button';
-        case 'Q': return 'Q > 數字 17:';
-        case 'R': return 'R > Shift 7 > 6 ➡️ 3';
-        case 'S': return 'S > 數字 5';
-        case 'T': return 'T > Shift 7 > 9 ➡️ 2';
-        case 'U': return 'U > Shift 7 > 4 ➡️ 1';
-        case 'V': return 'V > 數字 22:';
-        case 'W': return 'W > 數字 23:';
-        case 'X': return 'X > Button Alpha';
-        case 'Y': return 'Y > Button Alpha';
-        case 'Z': return 'Z > 數字 26:';
-        default: return match;
+    const inputText = document.getElementById('textInput').value.toUpperCase();
+    const outputDiv = document.getElementById('output');
+    const replacements = {
+      'A': 'Button Alpha',
+      'B': 'Button Alpha',
+      'C': 'Button Alpha',
+      'D': 'Button Alpha',
+      'E': 'exp',
+      'F': 'Shift 7 > 5 ➡️ 2',
+      'G': 'Shift 7 > 8 ➡️ 3',
+      'H': 'Shift 7 > 1 ➡️ 2',
+      'I': '數字1',
+      'J': '數字 10:',
+      'K': 'Shift 7 > 6 ➡️ 1',
+      'L': '數字1',
+      'M': 'Button Alpha',
+      'N': 'Shift 7 > 1 ➡️ 3',
+      'O': '數字 0',
+      'P': 'Shift NPr button',
+      'Q': '數字 17:',
+      'R': 'Shift 7 > 6 ➡️ 3',
+      'S': '數字 5',
+      'T': 'Shift 7 > 9 ➡️ 2',
+      'U': 'Shift 7 > 4 ➡️ 1',
+      'V': '數字 22:',
+      'W': '數字 23:',
+      'X': 'Button Alpha',
+      'Y': 'Button Alpha',
+      'Z': '數字 26:'
+    };
+
+    let outputHTML = '<p>Thank you for using our program, there are a total of ' + inputText.length + ' lines output.</p>';
+    for (let i = 0; i < inputText.length; i++) {
+      const character = inputText[i];
+      const replacement = replacements[character];
+      if (replacement) {
+        outputHTML += '<p>' + character + ' > ' + replacement + '</p>';
+      } else {
+        outputHTML += '<p>' + character + '</p>';
       }
-    });
-    var outputLines = output.split('\n');
-    var outputHTML = "<p>Thank you for using our program, there are a total of " + outputLines.length + " lines output.</p>";
-    outputLines.forEach(function(line) {
-      outputHTML += "<p>" + line + "</p>";
-    });
-    document.getElementById("outputText").innerHTML = outputHTML;
+    }
+
+    outputDiv.innerHTML = outputHTML;
   }
 
-  // Download as Word function
+  function download(filename, text) {
+    var element = document.createElement('a');
+    element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(text));
+    element.setAttribute('download', filename);
+
+    element.style.display = 'none';
+    document.body.appendChild(element);
+
+    element.click();
+
+    document.body.removeChild(element);
+  }
+
   function downloadWord() {
-    var text = document.getElementById("outputText").innerText;
-    var blob = new Blob([text], {type: "text/plain;charset=utf-8"});
-    saveAs(blob, "output.doc");
+    const outputText = document.getElementById('output').innerText;
+    download('output.doc', outputText);
   }
 
-  // Download as PDF function (not implemented)
   function downloadPDF() {
-    alert("Functionality not implemented.");
+    const outputText = document.getElementById('output').innerText;
+    // Logic to generate PDF from the outputText
+    // This part is not implemented in this code snippet
   }
 
-  // Download as Image function (not implemented)
   function downloadImage() {
-    alert("Functionality not implemented.");
+    // Logic to generate image from the outputText
+    // This part is not implemented in this code snippet
   }
 
-  // Reset data function
+  function downloadInput() {
+    const inputText = document.getElementById('textInput').value;
+    download('input.txt', inputText);
+  }
+
   function resetData() {
-    document.getElementById("popup").style.display = "block";
-    document.getElementById("overlay").style.display = "block";
-  }
-
-  // Confirm reset function
-  function confirmReset() {
-    document.getElementById("inputText").value = "";
-    document.getElementById("outputText").innerHTML = "";
-    cancelReset();
-  }
-
-  // Cancel reset function
-  function cancelReset() {
-    document.getElementById("popup").style.display = "none";
-    document.getElementById("overlay").style.display = "none";
+    if (confirm("Are you sure you want to reset the data?")) {
+      document.getElementById('textInput').value = '';
+      document.getElementById('output').innerHTML = '';
+    }
   }
 </script>
-
 </body>
 </html>
