@@ -1,9 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tiny Notes App</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #f4f4f4;
+        }
+        .container {
+            width: 300px;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        .note {
+            margin-bottom: 10px;
+        }
+        .note textarea {
+            width: 100%;
+            height: 80px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            padding: 8px;
+            resize: none;
+        }
+        .btn {
+            display: inline-block;
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            padding: 8px 16px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        .btn:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
 
-web app keep store links with copy and paste goodweb app keep store links with copy and paste goodweb app keep store links with copy and paste goodweb app keep store links with copy and paste goodweb app keep store links with copy and paste goodweb app keep store links with copy and paste goodweb app keep store links with copy and paste goodweb app keep store links with copy and paste good
+<div class="container">
+    <div class="note">
+        <textarea id="noteContent" placeholder="Type your note here..."></textarea>
+        <button class="btn" onclick="addNote()">Add</button>
+        <button class="btn" onclick="pasteContent()">Paste</button>
+    </div>
+    <div id="savedNotes"></div>
+</div>
 
+<script>
+    function addNote() {
+        const noteContent = document.getElementById('noteContent').value.trim();
+        if (noteContent !== '') {
+            const noteDiv = document.createElement('div');
+            noteDiv.classList.add('note');
+            noteDiv.innerHTML = `
+        <textarea readonly>${noteContent}</textarea>
+        <button class="btn" onclick="copyToClipboard(this)">Copy</button>
+      `;
+            document.getElementById('savedNotes').appendChild(noteDiv);
+            document.getElementById('noteContent').value = '';
+        }
+    }
 
-web app keep store links with copy and paste goodweb app keep store links with copy and paste goodweb app keep store links with copy and paste good
+    function pasteContent() {
+        navigator.clipboard.readText().then(text => {
+            document.getElementById('noteContent').value = text;
+        }).catch(err => {
+            console.error('Failed to read clipboard contents: ', err);
+        });
+    }
 
+    function copyToClipboard(button) {
+        const textArea = button.parentElement.querySelector('textarea');
+        textArea.select();
+        document.execCommand('copy');
+    }
+</script>
 
-
-
+</body>
+</html>
