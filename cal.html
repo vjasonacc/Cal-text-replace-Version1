@@ -1,248 +1,187 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <title> v2 ok mac app ver jason mac app Text Replace</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Text Replace</title>
   <style>
+    /* Beautiful, modern CSS goes here */
     body {
       font-family: Arial, sans-serif;
-      text-align: center;
+      background-color: #f4f4f4;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+
+    .container {
+      max-width: 600px;
+      background-color: #fff;
       padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
     }
-    
-    h1 {
-      color: #333;
-      margin-top: 20px;
-    }
-    
-    .input-container {
-      margin-top: 30px;
-    }
-    
+
     textarea {
-      width: 300px;
-      height: 100px;
-      padding: 10px;
-      font-size: 16px;
-      border: 1px solid #999;
-      resize: none;
+      width: 100%;
+      height: 150px;
+      margin-bottom: 10px;
     }
-    
-    .btn-container {
-      margin-top: 20px;
-    }
-    
-    .btn {
-      margin: 10px;
+
+    button {
       padding: 10px 20px;
       background-color: #007bff;
       color: #fff;
       border: none;
       border-radius: 4px;
-      font-size: 16px;
       cursor: pointer;
-      transition: background-color 0.3s;
     }
-    
-    .btn:hover {
+
+    button:hover {
       background-color: #0056b3;
     }
-    
-    .output-container {
-      margin-top: 30px;
-      text-align: left;
+
+    .reset-btn {
+      background-color: #dc3545;
     }
-    
-    .output-line {
-      margin-bottom: 10px;
+
+    .reset-btn:hover {
+      background-color: #bd2130;
     }
-    
-    .popup-container {
+
+    .popup {
+      display: none;
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background-color: #fff;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+      z-index: 999;
+    }
+
+    .popup h2 {
+      margin-top: 0;
+    }
+
+    .overlay {
+      display: none;
       position: fixed;
       top: 0;
       left: 0;
       width: 100%;
       height: 100%;
-      background-color: rgba(0, 0, 0, 0.5);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      z-index: 999;
-      display: none;
-    }
-    
-    .popup {
-      background-color: #fff;
-      padding: 20px;
-      border-radius: 4px;
-      box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
-      max-width: 400px;
-    }
-    
-    .popup h2 {
-      margin-top: 0;
-      color: #333;
-    }
-    
-    .popup-buttons {
-      margin-top: 20px;
-      text-align: center;
-    }
-    
-    .popup-buttons button {
-      margin: 10px;
-      padding: 10px 20px;
-      background-color: #007bff;
-      color: #fff;
-      border: none;
-      border-radius: 4px;
-      font-size: 16px;
-      cursor: pointer;
-      transition: background-color 0.3s;
-    }
-    
-    .popup-buttons button:hover {
-      background-color: #0056b3;
+      background-color: rgba(0,0,0,0.5);
+      z-index: 998;
     }
   </style>
 </head>
 <body>
-  <h1>ver jason mac app Text Replace</h1>
 
-  <div class="input-container">
-    <textarea id="inputText" placeholder="Enter text..."></textarea>
-  </div>
+<div class="container">
+  <h1>Text Replace</h1>
+  <textarea id="inputText" placeholder="Enter text here..."></textarea>
+  <button onclick="replaceText()">Replace Text</button>
+  <button onclick="downloadWord()">Download as Word</button>
+  <button onclick="downloadPDF()">Download as PDF</button>
+  <button onclick="downloadImage()">Download as Image</button>
+  <button class="reset-btn" onclick="resetData()">Reset Data</button>
 
-  <div class="btn-container">
-    <button class="btn" onclick="replaceText()">Replace Text</button>
-    <button class="btn" onclick="downloadWord()">Download as Word</button>
-    <button class="btn" onclick="downloadPDF()">Download as PDF</button>
-    <button class="btn" onclick="downloadImage()">Download as Image</button>
-    <button class="btn" onclick="downloadInput()">Download Input as Word</button>
-    <button class="btn" onclick="showResetPopup()">Reset Data</button>
-  </div>
+  <div id="outputText"></div>
+</div>
 
-  <div class="output-container" id="outputContainer"></div>
+<div id="popup" class="popup">
+  <h2>Are you sure you want to reset the data?</h2>
+  <button onclick="confirmReset()">Yes, Reset</button>
+  <button onclick="cancelReset()">Cancel</button>
+</div>
 
-  <div class="popup-container" id="popupContainer">
-    <div class="popup">
-      <h2>Reset Data</h2>
-      <p>Are you sure you want to reset the data?</p>
-      <div class="popup-buttons">
-        <button onclick="resetData()">Yes</button>
-        <button onclick="hideResetPopup()">No</button>
-      </div>
-    </div>
-  </div>
+<div id="overlay" class="overlay"></div>
 
-  <script>
-    function replaceText() {
-      var inputText = document.getElementById('inputText').value;
-      var outputContainer = document.getElementById('outputContainer');
-      outputContainer.innerHTML = '';
-
-      var replacements = {
-        'A': 'A > Button Alpha',
-        'B': 'B > Button Alpha',
-        'C': 'C > Button Alpha',
-        'D': 'D > Button Alpha',
-        'E': 'E > exp',
-        'F': 'F > 鍵7 > 5 ➡️ 2',
-        'G': 'G 鍵7 8 > 3',
-        'H': 'H 鍵7 1 ➡️ 2',
-        'I': 'I: 數字1',
-        'J': 'J :10:',
-        'K': 'K 鍵7 6 ➡️ 1',
-        'L': 'L 數字1',
-        'M': 'M 自己鍵鍵~=啊法',
-        'N': 'N :14:',
-        'O': 'O 數字0',
-        'P': 'P :16:',
-        'Q': 'Q :17:',
-        'R': 'R 鍵7 6 ➡️ 3',
-        'S': 'S 5',
-        'T': 'T 鍵7 9 ➡️ 2',
-        'U': 'U 鍵7 4 ➡️ 1',
-        'V': 'V :22:',
-        'W': 'W ：23',
-        'X': 'X 自己鍵鍵~=啊法',
-        'Y': 'Y 自己鍵鍵~=啊法',
-        'Z': 'Z ：26：'
-      };
-
-      var lines = inputText.split('\n');
-      var outputText = 'Thank you for using our program, there are a total of ' + lines.length + ' lines output.<br>';
-
-      for (var i = 0; i < lines.length; i++) {
-        var line = lines[i].toUpperCase();
-        if (replacements.hasOwnProperty(line)) {
-          outputText += line + ' > ' + replacements[line] + '<br>';
-        }
+<script>
+  // Text replace function
+  function replaceText() {
+    var input = document.getElementById("inputText").value;
+    var output = input.replace(/([A-Z])/g, function(match) {
+      switch(match) {
+        case 'A': return 'A > Button Alpha';
+        case 'B': return 'B > Button Alpha';
+        case 'C': return 'C > Button Alpha';
+        case 'D': return 'D > Button Alpha';
+        case 'E': return 'E > exp';
+        case 'F': return 'F > Shift 7 > 5 ➡️ 2';
+        case 'G': return 'G Shift 7 > 8 ➡️ 3';
+        case 'H': return 'H Shift 7 > 1 ➡️ 2';
+        case 'I': return 'I > 數字1';
+        case 'J': return 'J > 數字 10:';
+        case 'K': return 'K > Shift 7 > 6 ➡️ 1';
+        case 'L': return 'L > 數字1';
+        case 'M': return 'M > Button Alpha';
+        case 'N': return 'N > Shift 7 > 1 ➡️ 3';
+        case 'O': return 'O > 數字 0';
+        case 'P': return 'P > Shift NPr button';
+        case 'Q': return 'Q > 數字 17:';
+        case 'R': return 'R > Shift 7 > 6 ➡️ 3';
+        case 'S': return 'S > 數字 5';
+        case 'T': return 'T > Shift 7 > 9 ➡️ 2';
+        case 'U': return 'U > Shift 7 > 4 ➡️ 1';
+        case 'V': return 'V > 數字 22:';
+        case 'W': return 'W > 數字 23:';
+        case 'X': return 'X > Button Alpha';
+        case 'Y': return 'Y > Button Alpha';
+        case 'Z': return 'Z > 數字 26:';
+        default: return match;
       }
+    });
+    var outputLines = output.split('\n');
+    var outputHTML = "<p>Thank you for using our program, there are a total of " + outputLines.length + " lines output.</p>";
+    outputLines.forEach(function(line) {
+      outputHTML += "<p>" + line + "</p>";
+    });
+    document.getElementById("outputText").innerHTML = outputHTML;
+  }
 
-      outputContainer.innerHTML = outputText;
-    }
+  // Download as Word function
+  function downloadWord() {
+    var text = document.getElementById("outputText").innerText;
+    var blob = new Blob([text], {type: "text/plain;charset=utf-8"});
+    saveAs(blob, "output.doc");
+  }
 
-    function downloadWord() {
-      var outputContainer = document.getElementById('outputContainer');
-      var outputText = outputContainer.innerHTML;
-      var element = document.createElement('a');
-      element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(outputText));
-      element.setAttribute('download', 'output.doc');
-      element.style.display = 'none';
-      document.body.appendChild(element);
-      element.click();
-      document.body.removeChild(element);
-    }
+  // Download as PDF function (not implemented)
+  function downloadPDF() {
+    alert("Functionality not implemented.");
+  }
 
-    function downloadPDF() {
-      var outputContainer = document.getElementById('outputContainer');
-      var outputText = outputContainer.innerHTML;
-      var element = document.createElement('a');
-      element.setAttribute('href', 'data:application/pdf;charset=utf-8,' + encodeURIComponent(outputText));
-      element.setAttribute('download', 'output.pdf');
-      element.style.display = 'none';
-      document.body.appendChild(element);
-      element.click();
-      document.body.removeChild(element);
-    }
+  // Download as Image function (not implemented)
+  function downloadImage() {
+    alert("Functionality not implemented.");
+  }
 
-    function downloadImage() {
-      var outputContainer = document.getElementById('outputContainer');
-      var element = document.createElement('a');
-      element.setAttribute('href', 'data:image/jpeg;charset=utf-8,' + encodeURIComponent(outputContainer.innerHTML));
-      element.setAttribute('download', 'output.jpg');
-      element.style.display = 'none';
-      document.body.appendChild(element);
-      element.click();
-      document.body.removeChild(element);
-    }
+  // Reset data function
+  function resetData() {
+    document.getElementById("popup").style.display = "block";
+    document.getElementById("overlay").style.display = "block";
+  }
 
-    function downloadInput() {
-      var inputText = document.getElementById('inputText').value;
-      var element = document.createElement('a');
-      element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(inputText));
-      element.setAttribute('download', 'input.doc');
-      element.style.display = 'none';
-      document.body.appendChild(element);
-      element.click();
-      document.body.removeChild(element);
-    }
+  // Confirm reset function
+  function confirmReset() {
+    document.getElementById("inputText").value = "";
+    document.getElementById("outputText").innerHTML = "";
+    cancelReset();
+  }
 
-    function showResetPopup() {
-      var popupContainer = document.getElementById('popupContainer');
-      popupContainer.style.display = 'flex';
-    }
+  // Cancel reset function
+  function cancelReset() {
+    document.getElementById("popup").style.display = "none";
+    document.getElementById("overlay").style.display = "none";
+  }
+</script>
 
-    function hideResetPopup() {
-      var popupContainer = document.getElementById('popupContainer');
-      popupContainer.style.display = 'none';
-    }
-
-    function resetData() {
-      document.getElementById('inputText').value = '';
-      document.getElementById('outputContainer').innerHTML = '';
-      hideResetPopup();
-    }
-  </script>
 </body>
 </html>
