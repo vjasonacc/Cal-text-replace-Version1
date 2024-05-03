@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Train Schedule TV Interface</title>
+    <style>
+        body {
+            background-color: #000;
+            color: #fff;
+            font-family: Arial, sans-serif;
+            overflow: hidden;
+            margin: 0;
+            padding: 0;
+        }
+
+        .tv-screen {
+            width: 100%;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .schedule {
+            max-width: 800px;
+            padding: 30px;
+            background-color: rgba(0, 0, 0, 0.5);
+            border: 2px solid #fff;
+            border-radius: 20px;
+        }
+
+        .schedule h1 {
+            text-align: center;
+            font-size: 36px;
+            margin-bottom: 20px;
+        }
+
+        .platform {
+            margin-bottom: 20px;
+        }
+
+        .route {
+            padding: 15px;
+            background-color: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            margin-bottom: 15px;
+        }
+
+        .route h2 {
+            font-size: 24px;
+            margin-bottom: 10px;
+        }
+
+        .route-item {
+            margin-bottom: 5px;
+        }
+
+        .route-item span {
+            font-weight: bold;
+        }
+
+        .route-item .time {
+            margin-left: 10px;
+        }
+    </style>
+</head>
+<body>
+<div class="tv-screen">
+    <div class="schedule">
+        <h1>Train Schedule</h1>
+        <div id="scheduleData"></div>
+    </div>
+</div>
+<script>
+    function fetchAndUpdateData() {
+        fetch('https://rt.data.gov.hk/v1/transport/mtr/lrt/getSchedule?station_id=430')
+            .then(response => response.json())
+            .then(data => {
+                const scheduleData = document.getElementById('scheduleData');
+                scheduleData.innerHTML = ''; // Clear previous data
+
+                if (data.status === 1) {
+                    const platforms = data.platform_list;
+
+                    platforms.forEach(platform => {
+                        const platformDiv = document.createElement('div');
+                        platformDiv.classList.add('platform');
+
+                        const routes = platform.route_list;
+                        routes.forEach(route => {
+                            const routeDiv = document.createElement('div');
+                            routeDiv.classList.add('route');
+
+                            const destination = route.dest_en;
+                            const time = route.time_en;
+
+                            const heading = document.createElement('h2');
+                            heading.textContent = `${destination}`;
+                            routeDiv.appendChild(heading);
+
+                            const trainLength = document.createElement('div');
+                            trainLength.classList.add('route-item');
+                            trainLength.textContent = `Train Length: ${route.train_length}`;
+                            routeDiv.appendChild(trainLength);
+
+                            const arrivalDeparture = document.createElement('div');
+                            arrivalDeparture.classList.add('route-item');
+                            arrivalDeparture.textContent = `Arrival/Departure: ${route.arrival_departure}`;
+                            routeDiv.appendChild(arrivalDeparture);
+
+                            const timeInfo = document.createElement('div');
+                            timeInfo.classList.add('route-item', 'time');
+                            timeInfo.innerHTML = `Time: <span>${time}</span>`;
+                            routeDiv.appendChild(timeInfo);
+
+                            platformDiv.appendChild(routeDiv);
+                        });
+
+                        scheduleData.appendChild(platformDiv);
+                    });
+                } else {
+                    scheduleData.textContent = 'Failed to fetch data.';
+                }
+            })
+            .catch(error => {
+                console.error('Error fetching data:', error);
+                scheduleData.textContent = 'Failed to fetch data.';
+            });
+    }
+
+    // Fetch data initially and then update every 4 seconds
+    fetchAndUpdateData();
+    setInterval(fetchAndUpdateData, 4000);
+</script>
+</body>
+</html>
