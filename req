@@ -1,0 +1,144 @@
+Requirement:
+Make a web program call “Text Replace”
+ let the user enter text first.
+Make a button to let user download output as word file.
+Make a button to let user download output as a PDF file.
+Make a button to let the user download output data as a jpeg image file.
+Make a button to let the user download the inputted data as a word file.
+all download buttons must be working. 
+Make a button to let the user Reset data. A CSS pop up Asking user before reset data.
+I need very beautiful, cool, modern CSS. Code must support github code, make css and html code inside one file.
+Website must support desktop and mobile UI, interactive ui.
+make code as simple as possible
+You must generate and give me entire code
+This web program lets user replace text and you must output one by one on each line automatically, output data inside the webpage, do not output data using html pop up.
+treat uppercase and lowercase letters as the same
+Follow table below 
+
+
+
+orginal text
+replace with
+A
+A > Button Alpha
+B
+B > Button Alpha
+C
+C > Button Alpha
+D
+D > Button Alpha
+E
+E > exp
+F
+F > 鍵7 > 5 ➡️ 2
+G
+G 鍵7 8 > 3
+H
+H 鍵7 1 ➡️ 2
+I
+I : 數字1
+J
+J :10:
+K
+K 鍵7 6 ➡️ 1
+l
+L 數字1
+M
+M 自己鍵鍵~=啊法
+N
+N :14:
+O
+O 數字0
+P
+P :16:
+Q
+Q :17:
+R
+R 鍵7 6 ➡️ 3
+S
+S 5
+T
+T 鍵7 9 ➡️ 2
+U
+U 鍵7 4 ➡️ 1
+V
+V :22:
+W
+W ：23
+X
+X 自己鍵鍵~=啊法
+Y
+Y 自己鍵鍵~=啊法
+Z
+Z ：26：
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+______
+For example,  if user enters AAB,
+the output should be like this with 3 different lines:
+
+Thank you for using our program, there are a total of 3 lines output. 
+A > Button Alpha
+A > Button Alpha
+B > Button Alpha
+
+
+
+
