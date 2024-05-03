@@ -17,63 +17,34 @@ Follow table below
 
 
 
-orginal text
-replace with
-A
-A > Button Alpha
-B
-B > Button Alpha
-C
-C > Button Alpha
-D
-D > Button Alpha
-E
-E > exp
-F
-F > 鍵7 > 5 ➡️ 2
-G
-G 鍵7 8 > 3
-H
-H 鍵7 1 ➡️ 2
-I
-I : 數字1
-J
-J :10:
-K
-K 鍵7 6 ➡️ 1
-l
-L 數字1
-M
-M 自己鍵鍵~=啊法
-N
-N :14:
-O
-O 數字0
-P
-P :16:
-Q
-Q :17:
-R
-R 鍵7 6 ➡️ 3
-S
-S 5
-T
-T 鍵7 9 ➡️ 2
-U
-U 鍵7 4 ➡️ 1
-V
-V :22:
-W
-W ：23
-X
-X 自己鍵鍵~=啊法
-Y
-Y 自己鍵鍵~=啊法
-Z
-Z ：26：
-
-
-
+orginal text	 replace with
+A	A > Button Alpha
+B	B > Button Alpha
+C	C > Button Alpha
+D	D > Button Alpha
+E	E > exp
+F	F > Shift 7 > 5 ➡️ 2
+G	G Shift 7 > 8 ➡️ 3
+H	H Shift 7 > 1 ➡️ 2
+I	I > 數字1
+J	J > 數字 10:
+K	K > Shift 7 > 6 ➡️ 1
+l	L > 數字1
+M	M > Button Alpha
+N	N > Shift 7 > 1 ➡️ 3
+O	O > 數字 0
+P	P > Shift NPr button
+Q	Q > 數字 17:
+R	R > Shift 7 > 6 ➡️ 3
+S	S > 數字 5
+T	T > Shift 7 9 ➡️ 2
+U	U > Shift 7 4 ➡️ 1
+V	V > 數字 22:
+W	W > 數字 23:
+X	X  > Button Alpha
+Y	Y  > Button Alpha
+Z	Z > 數字 26:
+	
 
 
 
