@@ -26,7 +26,7 @@
             margin-bottom: 10px;
         }
         .note textarea {
-            width: 100%;
+            width: calc(100% - 48px);
             height: 80px;
             border: 1px solid #ccc;
             border-radius: 4px;
@@ -68,6 +68,8 @@
             noteDiv.innerHTML = `
         <textarea readonly>${noteContent}</textarea>
         <button class="btn" onclick="copyToClipboard(this)">Copy</button>
+        <button class="btn" onclick="openNote(this)">Open</button>
+        <button class="btn" onclick="deleteNote(this)">Delete</button>
       `;
             document.getElementById('savedNotes').appendChild(noteDiv);
             document.getElementById('noteContent').value = '';
@@ -86,6 +88,17 @@
         const textArea = button.parentElement.querySelector('textarea');
         textArea.select();
         document.execCommand('copy');
+    }
+
+    function deleteNote(button) {
+        const noteDiv = button.parentElement;
+        noteDiv.parentElement.removeChild(noteDiv);
+    }
+
+    function openNote(button) {
+        const noteText = button.parentElement.querySelector('textarea').value;
+        // Implement functionality to open the note, e.g., redirect to another page or display in a modal
+        alert(noteText); // Example: showing the note content in an alert
     }
 </script>
 
