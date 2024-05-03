@@ -27,13 +27,14 @@
       box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     }
 
-    input[type="text"] {
+    textarea {
       width: 100%;
       padding: 10px;
       margin-bottom: 20px;
       border: 1px solid #ccc;
       border-radius: 5px;
       box-sizing: border-box;
+      resize: vertical; /* Allow vertical resizing */
     }
 
     button {
@@ -43,6 +44,7 @@
       border: none;
       border-radius: 5px;
       cursor: pointer;
+      margin-right: 10px;
     }
 
     button:hover {
@@ -59,11 +61,12 @@
 </head>
 <body>
 <div class="container">
-  <input type="text" id="textInput" placeholder="Enter text...">
+  <textarea id="textInput" rows="5" placeholder="Enter text..."></textarea>
   <button onclick="replaceText()">Replace Text</button>
   <div class="output" id="output"></div>
   <button onclick="downloadWord()">Download as Word</button>
   <button onclick="downloadPDF()">Download as PDF</button>
+  <button onclick="downloadText()">Download as Text</button>
   <button onclick="downloadImage()">Download as JPEG</button>
   <button onclick="downloadInput()">Download Input</button>
   <button onclick="resetData()">Reset Data</button>
@@ -71,7 +74,7 @@
 
 <script>
   function replaceText() {
-    const inputText = document.getElementById('textInput').value.toUpperCase();
+    const inputText = document.getElementById('textInput').value;
     const outputDiv = document.getElementById('output');
     const replacements = {
       'A': 'Button Alpha',
@@ -102,18 +105,39 @@
       'Z': '數字 26:'
     };
 
-    let outputHTML = '<p>Thank you for using our program, there are a total of ' + inputText.length + ' lines output.</p>';
-    for (let i = 0; i < inputText.length; i++) {
-      const character = inputText[i];
-      const replacement = replacements[character];
-      if (replacement) {
-        outputHTML += '<p>' + character + ' > ' + replacement + '</p>';
-      } else {
-        outputHTML += '<p>' + character + '</p>';
+    let outputHTML = '<p>Current system generate date and time is ' + getFormattedDateAndTime() + '</p>';
+    outputHTML += '<p>Thank you for using our program, there are a total of 20 lines output.</p>';
+    outputHTML += '<hr>';
+
+    const lines = inputText.split('\n');
+    lines.forEach(line => {
+      outputHTML += '<p>- - - - - - - - - - - -</p>';
+      outputHTML += '<p>' + line + '</p>';
+      for (let i = 0; i < line.length; i++) {
+        const character = line[i].toUpperCase();
+        const replacement = replacements[character];
+        if (replacement) {
+          outputHTML += '<p>' + character + ' > ' + replacement + '</p>';
+        } else {
+          outputHTML += '<p>' + character + '</p>';
+        }
       }
-    }
+    });
+
+    outputHTML += '<p>=============</p>';
+    outputHTML += '<p>The end. Current system generate date and time is ' + getFormattedDateAndTime() + '</p>';
+    outputHTML += '<p>=============</p>';
 
     outputDiv.innerHTML = outputHTML;
+  }
+
+  function getFormattedDateAndTime() {
+    const now = new Date();
+    const hours = now.getHours() % 12 || 12; // Convert hours to 12-hour format
+    const minutes = now.getMinutes().toString().padStart(2, '0'); // Add leading zero if minutes < 10
+    const ampm = now.getHours() >= 12 ? 'PM' : 'AM';
+    const formattedDateAndTime = now.toLocaleDateString() + ' ' + hours + ':' + minutes + ' ' + ampm;
+    return formattedDateAndTime;
   }
 
   function download(filename, text) {
@@ -138,6 +162,11 @@
     const outputText = document.getElementById('output').innerText;
     // Logic to generate PDF from the outputText
     // This part is not implemented in this code snippet
+  }
+
+  function downloadText() {
+    const outputText = document.getElementById('output').innerText;
+    download('output.txt', outputText);
   }
 
   function downloadImage() {

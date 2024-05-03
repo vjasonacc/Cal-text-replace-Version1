@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Text   Replace</title>
+    <title>Text Replace</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -95,8 +95,7 @@
         ];
 
         echo '<p>Thank you for using our program, there are a total of ' . strlen($inputText) . ' lines output.</p>';
-        for ($i = 0; $i < strlen($inputText); $i++) {
-        $character = $inputText[$i];
+        foreach(str_split($inputText) as $character) {
         $replacement = isset($replacements[$character]) ? $replacements[$character] : $character;
         echo '<p>' . $character . ' > ' . $replacement . '</p>';
         }
