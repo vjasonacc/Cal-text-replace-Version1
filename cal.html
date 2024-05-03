@@ -1,24 +1,46 @@
-
 <!DOCTYPE html>
 <html>
 <head>
   <title>Text Replace</title>
   <style>
-    /* Add your beautiful, cool, modern CSS styles here */
+    body {
+      font-family: Arial, sans-serif;
+    }
+
+    h1 {
+      text-align: center;
+    }
+
+    .container {
+      max-width: 600px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+
+    textarea {
+      width: 100%;
+      padding: 10px;
+      margin-bottom: 10px;
+    }
+
+    .output {
+      margin-top: 20px;
+      padding: 10px;
+      border: 1px solid #ccc;
+    }
   </style>
 </head>
 <body>
-  <h1>Text Replace</h1>
-  <textarea id="textInput" rows="5" cols="50"></textarea><br><br>
-  <button onclick="replaceText()">Replace Text</button>
-  <button onclick="downloadAsWord()">Download as Word</button>
-  <button onclick="downloadAsPDF()">Download as PDF</button>
-  <button onclick="downloadAsImage()">Download as Image</button>
-  <button onclick="downloadInputAsWord()">Download Input as Word</button>
-  <button onclick="resetData()">Reset Data</button>
-  
-  <div id="output"></div>
-  
+  <div class="container">
+    <h1>Text Replace</h1>
+    <textarea id="textInput" rows="5" placeholder="Enter text"></textarea>
+    <button onclick="replaceText()">Replace Text</button>
+    <button onclick="downloadOutput('output.txt', outputData)">Download Output as Text</button>
+    <button onclick="downloadInput('input.txt', inputData)">Download Input as Text</button>
+    <button onclick="resetData()">Reset Data</button>
+    <div class="output" id="output"></div>
+  </div>
+
   <script>
     function replaceText() {
       var inputText = document.getElementById("textInput").value;
@@ -51,40 +73,30 @@
 
       var lines = replacedText.split('\n');
       var outputContainer = document.getElementById("output");
-      outputContainer.innerHTML = "Thank you for using our program, there are a total of " + lines.length + " lines output." + "<br>";
-
+      outputContainer.innerHTML = "Thank you for using our program, there are a total of " + lines.length + " lines output.<br>";
+      
       for (var i = 0; i < lines.length; i++) {
         outputContainer.innerHTML += lines[i] + "<br>";
       }
+
+      // Store data for download
+      outputData = replacedText;
+      inputData = inputText;
     }
 
-    function downloadAsWord() {
-      var outputText = document.getElementById("output").innerText;
-      var blob = new Blob([outputText], { type: 'text/plain' });
-      var url = URL.createObjectURL(blob);
+    function downloadOutput(filename, text) {
+      var blob = new Blob([text], { type: 'text/plain' });
       var link = document.createElement("a");
-      link.href = url;
-      link.download = "output.docx";
+      link.href = URL.createObjectURL(blob);
+      link.download = filename;
       link.click();
     }
 
-    function downloadAsPDF() {
-      var outputText = document.getElementById("output").innerText;
-      // Code for generating PDF from outputText
-    }
-
-    function downloadAsImage() {
-      var outputText = document.getElementById("output").innerText;
-      // Code for converting outputText to image
-    }
-
-    function downloadInputAsWord() {
-      var inputText = document.getElementById("textInput").value;
-      var blob = new Blob([inputText], { type: 'text/plain' });
-      var url = URL.createObjectURL(blob);
+    function downloadInput(filename, text) {
+      var blob = new Blob([text], { type: 'text/plain' });
       var link = document.createElement("a");
-      link.href = url;
-      link.download = "input.docx";
+      link.href = URL.createObjectURL(blob);
+      link.download = filename;
       link.click();
     }
 
@@ -92,6 +104,65 @@
       if (confirm("Are you sure you want to reset the data?")) {
         document.getElementById("textInput").value = "";
         document.getElementById("output").innerHTML = "";
+      }
+    }
+  </script>
+</body>
+Apologies for the confusion. Here's the corrected and complete code with CSS styles and the desired output format:
+
+```html
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Text Replace</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+    }
+
+    h1 {
+      text-align: center;
+    }
+
+    .container {
+      max-width: 600px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+
+    textarea {
+      width: 100%;
+      padding: 10px;
+      margin-bottom: 10px;
+    }
+
+    .output {
+      margin-top: 20px;
+      padding: 10px;
+      border: 1px solid #ccc;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Text Replace</h1>
+    <textarea id="textInput" rows="5" placeholder="Enter text"></textarea>
+    <button onclick="replaceText()">Replace Text</button>
+    <div class="output" id="output"></div>
+  </div>
+
+  <script>
+    function replaceText() {
+      var inputText = document.getElementById("textInput").value;
+      var replacedText = inputText.replace(/A/gi, "A > Button Alpha")
+                                  .replace(/B/gi, "B > Button Alpha");
+
+      var lines = replacedText.split('\n');
+      var outputContainer = document.getElementById("output");
+      outputContainer.innerHTML = "Thank you for using our program, there are a total of " + lines.length + " lines output.<br>";
+      
+      for (var i = 0; i < lines.length; i++) {
+        outputContainer.innerHTML += lines[i] + "<br>";
       }
     }
   </script>
