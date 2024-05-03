@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>keep link</title>
+    <title>Tiny link App</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -123,13 +123,13 @@
         // If it's a valid URL, open it directly
         if (isUrl) {
             if (!url.startsWith('http://') && !url.startsWith('https://') && !url.startsWith('ftp://')) {
-                // If no protocol specified, prepend "http://"
-                url = 'http://' + url;
+                // If no protocol specified, treat it as a domain name
+                url = 'http://' + url; // Assuming HTTP protocol
             }
             window.open(url, '_blank');
         } else {
-            // If it's not a valid URL, alert the user
-            alert('Invalid URL');
+            // If it's not a valid URL, try opening it directly as a domain name
+            window.open('http://' + url, '_blank');
         }
     }
 </script>
