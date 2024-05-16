@@ -1,83 +1,92 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Sleep Duration Calculator</title>
+    <title>Sleep Time Calculator</title>
     <style>
         body {
+            text-align: center;
             font-family: Arial, sans-serif;
-            background-color: #f4f4f4;
-            margin: 0;
-            padding: 20px;
         }
 
-        h1, h2 {
-            text-align: center;
+        h1 {
+            color: #333;
         }
 
         .container {
-            max-width: 400px;
-            margin: 0 auto;
-            background-color: #fff;
-            padding: 20px;
-            border-radius: 5px;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            margin-top: 50px;
         }
 
-        label {
-            display: block;
-            margin-bottom: 10px;
-        }
-
-        input[type="time"] {
-            width: 100%;
-            padding: 10px;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-            box-sizing: border-box;
+        #sleep-time, #wake-time {
+            margin-top: 20px;
+            font-size: 18px;
+            padding: 5px 10px;
         }
 
         #result {
             margin-top: 20px;
-            text-align: center;
+            font-size: 20px;
             font-weight: bold;
+        }
+
+        #calculate-btn {
+            margin-top: 20px;
+            font-size: 16px;
+            padding: 10px 20px;
+            background-color: #333;
+            color: #fff;
+            border: none;
+            cursor: pointer;
         }
     </style>
 </head>
 <body>
-<h1>Sleep Duration Calculator</h1>
+<h1>Sleep Time Calculator</h1>
 <div class="container">
-    <label for="sleepTime">Sleep Time:</label>
-    <input type="time" id="sleepTime" value="" onchange="calculateSleepDuration()">
-
-    <label for="wakeTime">Wake Time:</label>
-    <input type="time" id="wakeTime" value="" disabled>
-
+    <label for="wake-time">Wake Time:</label>
+    <input type="time" id="wake-time" value="" />
+    <br>
+    <button id="calculate-btn">Calculate</button>
     <div id="result"></div>
 </div>
 
 <script>
-    function calculateSleepDuration() {
-        var sleepTime = document.getElementById("sleepTime").value;
+    document.addEventListener("DOMContentLoaded", function() {
+        var wakeTimeInput = document.getElementById("wake-time");
+        var calculateBtn = document.getElementById("calculate-btn");
+        var resultDiv = document.getElementById("result");
 
-        var current = new Date();
-        var currentTime = current.getHours() + ":" + current.getMinutes();
-        document.getElementById("sleepTime").value = currentTime;
+        // Set default wake time to 8:00 AM
+        wakeTimeInput.value = "08:00";
 
-        var sleepDate = new Date("2000-01-01 " + sleepTime);
-        var wakeDate = new Date("2000-01-01 " + currentTime);
+        // Calculate sleep duration when wake time is entered
+        wakeTimeInput.addEventListener("change", function() {
+            calculateSleepDuration();
+        });
 
-        var sleepDuration = wakeDate - sleepDate;
-
-        var hours = Math.floor(sleepDuration / (1000 * 60 * 60));
-        var minutes = Math.floor((sleepDuration % (1000 * 60 * 60)) / (1000 * 60));
-
-        var result = document.getElementById("result");
-        result.innerHTML = "You slept for " + hours + " hours and " + minutes + " minutes.";
-    }
-
-    window.onload = function() {
+        // Hide button and calculate sleep duration automatically
+        calculateBtn.style.display = "none";
         calculateSleepDuration();
-    };
+
+        function calculateSleepDuration() {
+            var wakeTimeString = wakeTimeInput.value;
+            var wakeTimeParts = wakeTimeString.split(":");
+            var wakeHour = parseInt(wakeTimeParts[0]);
+            var wakeMinute = parseInt(wakeTimeParts[1]);
+
+            var sleepDuration = calculateSleepDurationFromWakeTime(wakeHour, wakeMinute);
+            resultDiv.innerHTML = "You can sleep for approximately " + sleepDuration + " hours.";
+        }
+
+        function calculateSleepDurationFromWakeTime(wakeHour, wakeMinute) {
+            var sleepHour = wakeHour - 8;
+            if (sleepHour < 0) {
+                sleepHour = 24 + sleepHour;
+            }
+            var sleepMinute = wakeMinute;
+
+            return sleepHour + " hours " + sleepMinute + " minutes";
+        }
+    });
 </script>
 </body>
 </html>
