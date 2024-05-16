@@ -1,1 +1,83 @@
-test
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Sleep Duration Calculator</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 20px;
+        }
+
+        h1, h2 {
+            text-align: center;
+        }
+
+        .container {
+            max-width: 400px;
+            margin: 0 auto;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        label {
+            display: block;
+            margin-bottom: 10px;
+        }
+
+        input[type="time"] {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+
+        #result {
+            margin-top: 20px;
+            text-align: center;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+<h1>Sleep Duration Calculator</h1>
+<div class="container">
+    <label for="sleepTime">Sleep Time:</label>
+    <input type="time" id="sleepTime" value="" onchange="calculateSleepDuration()">
+
+    <label for="wakeTime">Wake Time:</label>
+    <input type="time" id="wakeTime" value="" disabled>
+
+    <div id="result"></div>
+</div>
+
+<script>
+    function calculateSleepDuration() {
+        var sleepTime = document.getElementById("sleepTime").value;
+
+        var current = new Date();
+        var currentTime = current.getHours() + ":" + current.getMinutes();
+        document.getElementById("sleepTime").value = currentTime;
+
+        var sleepDate = new Date("2000-01-01 " + sleepTime);
+        var wakeDate = new Date("2000-01-01 " + currentTime);
+
+        var sleepDuration = wakeDate - sleepDate;
+
+        var hours = Math.floor(sleepDuration / (1000 * 60 * 60));
+        var minutes = Math.floor((sleepDuration % (1000 * 60 * 60)) / (1000 * 60));
+
+        var result = document.getElementById("result");
+        result.innerHTML = "You slept for " + hours + " hours and " + minutes + " minutes.";
+    }
+
+    window.onload = function() {
+        calculateSleepDuration();
+    };
+</script>
+</body>
+</html>
